@@ -54,11 +54,12 @@ print("Test de reconnaissance d'image sur la base de donnees CIFAR-10")
 print("Longueur data_test : {} taille image = {} ".format(len(data_test),len(data_test[0])))
 
 # Nombre d'images à tester - 1
-#a_tester=len(data_test)
-a_tester=2
+a_tester=len(data_test)+1
+#a_tester=1001
+compteur=0
 
 # Nombre de plus proches voisins à garder
-K=5
+K=20
 
 # Calcul des distances et prédiction des labels
 for image_number in range(0,a_tester-1):
@@ -73,10 +74,10 @@ for image_number in range(0,a_tester-1):
         
         # On calcule la distance entre l'image test et toutes les images d'une base de données
         for j in range(0,len(data_apprentissage[b'data'])):
-            print("Image num{} de la section d'apprentissage {}".format(j,i))
+            #print("Image num{} de la section d'apprentissage {}".format(j,i))
             dist_temp=dist(data_test[image_number],data_apprentissage[b'data'][j])
             distances.append(dist_temp)
-            print("Distance calculee : {}".format(distances[j]))
+            #print("Distance calculee : {}".format(distances[j]))
         #end for
     #end for
             
@@ -86,12 +87,12 @@ for image_number in range(0,a_tester-1):
     
     # Initialisation des vecteurs finaux pour fixer leurs dimensions
     list_of_labels=data1_labels+data2_labels+data3_labels+data4_labels+data5_labels # Liste de tous les labels des images d'apprentissage
-    distances_finales=[0,0,0,0,0] # Contient les distances min
-    real_index=[0,0,0,0,0] # Contient les index de list_dist des dist min pour retrouver leur label
-    label_choisi=[0,0,0,0,0] # Contient les labels choisis
+    distances_finales=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] # Contient les distances min
+    real_index=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] # Contient les index de list_dist des dist min pour retrouver leur label
+    label_choisi=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] # Contient les labels choisis
         
     # Remplissage des vecteurs finaux et récupération des labels correspondants
-    for k in range(0,K-1):
+    for k in range(0,K):
         real_index[k]=list_dist.index(distances_minimales[k])
         distances_finales[k]=distances_minimales[k]
         label_choisi[k]=list_of_labels[real_index[k]]
@@ -103,14 +104,13 @@ for image_number in range(0,a_tester-1):
     #end for
     label_final=label_count.index(max(label_count))
     print("Label choisi : {}".format(label_final))
-    print("Label exact : {}".format(test_labels[image_number]))   
+    print("Label exact : {}".format(test_labels[image_number]))
+    if label_final==test_labels[image_number]:
+        compteur=compteur+1
+    #end if
 #end for
-        
-
-
-
-
-
+print("{} bonne(s) estimation(s) sur {} image(s)".format(compteur,a_tester-1))
+        #2200/10000
 
 
 
